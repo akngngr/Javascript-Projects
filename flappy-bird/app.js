@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bird = document.querySelector('.bird')
     const gameDisplay = document.querySelector('.game-container')
     const ground = document.querySelector('.ground-moving')
-    
+    const score = document.createElement('div')
 
     let birdLeft = 220
     let birdBottom = 100
@@ -10,14 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let isGameOver = false
     let gap = 430
     let flapCount = 0
+    let obstacleCount = 0
 
     function startGame() {
         birdBottom -= gravity
         bird.style.bottom = birdBottom + 'px'
         bird.style.left = birdLeft + 'px'
-       
+        ground.appendChild(score)
+        score.classList.add('score')
+        score.textContent = 'Score: ' + flapCount + ' Obstacle: ' + obstacleCount
     }
-
 
     let gameTimerId = setInterval(startGame, 20)
 
@@ -25,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function control(e) {
         if (e.keyCode === 32) {
             jump()
-            //everytime bird flaps winds adds +1 point
+            //everytime bird flaps wings adds +1 point
             flapCount++;
             
         }
@@ -52,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isGameOver) {
             obstacle.classList.add('obstacle')
             topObstacle.classList.add('top-obstacle')
+            
         }
 
         gameDisplay.appendChild(obstacle)
@@ -76,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //every time bird passes an obstacle it's +10 points
             if (obstacleLeft === birdLeft) {
                 flapCount +=10
+                obstacleCount++
             }
 
             if (obstacleLeft > 200 && obstacleLeft < 280 && birdLeft === 220 &&
@@ -92,9 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
     }
-
-
+    
     generateObstacle()
+    
 
     function gameOver() {
         clearInterval(gameTimerId)
@@ -102,7 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.removeEventListener('keyup', control)
         ground.classList.add('ground')
         ground.classList.remove('ground-moving')
-        alert('Game is Over! Your flap count: ' + flapCount)
+        alert('Game is Over! Your flap count: ' + flapCount + ' You passed: ' + obstacleCount + ' obstacles')
     }  
+    
 
-})
+    })
